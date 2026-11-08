@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Avisos del discador</title>
+  <link rel="stylesheet" href="panel.css">
+</head>
+<body>
+  <header>
+    <img src="iconos/icono-32.png" alt="">
+    <div class="titulo">
+      <strong>Avisos del discador</strong>
+      <small id="usuario"></small>
+    </div>
+    <span id="conexion" class="chip"></span>
+  </header>
+
+  <form id="ingreso" hidden>
+    <p class="suave">Ingresá con tu usuario del discador.</p>
+    <label>Servidor <input id="servidor" placeholder="https://10.0.0.10:5173" required></label>
+    <label>Usuario <input id="nombreUsuario" autocomplete="username" required></label>
+    <label>Clave <input id="clave" type="password" autocomplete="current-password" required></label>
+    <button class="primario">Ingresar</button>
+    <p id="errorIngreso" class="error"></p>
+  </form>
+
+  <main id="principal" hidden>
+    <!-- Dos colas separadas: los leads del bot de WhatsApp (van primero: el cliente está escribiendo
+         ahora) y los avisos del IVR. Cada pestaña muestra sus pendientes en el circulito. -->
+    <div class="pestanas">
+      <button data-origen="whatsapp" class="activa">LEADS <span class="burbuja" id="burbujaLeads" hidden></span></button>
+      <button data-origen="ivr">IVR <span class="burbuja ivr" id="burbujaIvr" hidden></span></button>
+    </div>
+    <nav>
+      <button data-vista="pendientes" class="activa">Pendientes</button>
+      <button data-vista="recientes">Historial</button>
+    </nav>
+    <p id="error" class="error"></p>
+    <div id="lista"></div>
+    <details id="opciones">
+      <summary>Opciones</summary>
+      <label class="tilde"><input type="checkbox" id="sonidoLeads"> Sonido de los leads</label>
+      <label class="tilde"><input type="checkbox" id="sonidoIvr"> Sonido de los avisos del IVR</label>
+    </details>
+    <footer>
+      <button id="salir" class="chico">Salir</button>
+    </footer>
+  </main>
+
+  <template id="tarjeta">
+    <article class="aviso">
+      <div class="fila">
+        <span class="tipo"></span>
+        <span class="hora suave"></span>
+      </div>
+      <div class="etiquetas"></div>
+      <div class="numero"></div>
+      <div class="nombre"></div>
+      <div class="detalle"></div>
+      <div class="campana suave"></div>
+      <div class="acciones"></div>
+    </article>
+  </template>
+
+  <script type="module" src="panel.js"></script>
+</body>
+</html>

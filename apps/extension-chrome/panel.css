@@ -1,0 +1,60 @@
+:root {
+  --fondo: #0e1722; --panel: #142230; --borde: #2b3d4d; --texto: #e6edf3; --suave: #8ea3b5;
+  --acento: #65d6bc; --llamada: #4ea1ff; --whatsapp: #25d366; --peligro: #e5534b;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fondo); color: var(--texto); font: 14px/1.4 system-ui, sans-serif; }
+header { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--borde); background: var(--panel); }
+header .titulo { display: flex; flex-direction: column; flex: 1; }
+header small { color: var(--suave); }
+.chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--borde); color: var(--suave); }
+.chip.ok { color: var(--acento); border-color: var(--acento); }
+.chip.mal { color: var(--peligro); border-color: var(--peligro); }
+form, main { padding: 12px; }
+form { display: flex; flex-direction: column; gap: 10px; }
+label { display: flex; flex-direction: column; gap: 4px; color: var(--suave); }
+input { background: var(--panel); border: 1px solid var(--borde); color: var(--texto); border-radius: 6px; padding: 8px; font: inherit; }
+button { background: var(--panel); color: var(--texto); border: 1px solid var(--borde); border-radius: 6px; padding: 7px 10px; font: inherit; cursor: pointer; }
+button:hover { border-color: var(--acento); }
+button.primario { background: var(--acento); color: #0b1a17; border-color: var(--acento); font-weight: 600; }
+button.whatsapp { background: var(--whatsapp); color: #062b14; border-color: var(--whatsapp); font-weight: 600; }
+button.chico { padding: 4px 8px; font-size: 12px; }
+nav { display: flex; gap: 6px; margin-bottom: 10px; }
+nav button { flex: 1; }
+nav button.activa { border-color: var(--acento); color: var(--acento); }
+.suave { color: var(--suave); }
+.error { color: var(--peligro); min-height: 1em; margin: 4px 0; }
+.aviso { background: var(--panel); border: 1px solid var(--borde); border-left: 4px solid var(--llamada); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+.aviso.whatsapp { border-left-color: var(--whatsapp); }
+.aviso.nuevo { box-shadow: 0 0 0 1px var(--acento); }
+.aviso .fila { display: flex; justify-content: space-between; align-items: center; }
+.aviso .tipo { font-weight: 700; color: var(--llamada); }
+.aviso.whatsapp .tipo { color: var(--whatsapp); }
+.aviso .numero { font-size: 22px; font-weight: 700; letter-spacing: .5px; margin: 4px 0 2px; user-select: all; }
+.aviso .nombre { font-weight: 600; }
+.aviso .acciones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.vacio { text-align: center; color: var(--suave); padding: 30px 0; }
+footer { display: flex; justify-content: flex-end; margin-top: 12px; }
+
+/* Pestañas LEADS | IVR con su circulito de pendientes, como los no leídos de WhatsApp */
+.pestanas { display: flex; gap: 6px; margin-bottom: 8px; }
+.pestanas button { flex: 1; font-weight: 700; letter-spacing: .5px; padding: 9px 10px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.pestanas button.activa { background: #1b3346; border-color: var(--acento); color: var(--texto); }
+.burbuja { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 999px; background: var(--whatsapp); color: #062b14; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+.burbuja.ivr { background: var(--llamada); color: #04203f; }
+.burbuja[hidden] { display: none; }
+
+.aviso.lead { border-left-color: var(--whatsapp); }
+.aviso.lead .tipo { color: var(--whatsapp); }
+.etiquetas { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.etiqueta { font-size: 12px; font-weight: 800; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--borde); color: var(--suave); }
+.etiqueta.portabilidad { background: #1f9d55; border-color: #1f9d55; color: #fff; }
+.etiqueta.fibra { background: #2f6fde; border-color: #2f6fde; color: #fff; }
+.etiqueta.compania { color: var(--texto); }
+.etiqueta.revisar { color: #f2c94c; border-color: #f2c94c; }
+.detalle .dato { margin-top: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.detalle .direccion { white-space: pre-line; }
+#opciones { margin-top: 12px; color: var(--suave); }
+#opciones summary { cursor: pointer; }
+.tilde { flex-direction: row; align-items: center; gap: 8px; margin-top: 6px; }

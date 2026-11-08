@@ -1,0 +1,13 @@
+{
+  "manifest_version": 3,
+  "name": "Discador - Avisos",
+  "short_name": "Avisos",
+  "version": "1.2.0",
+  "description": "Recibe los leads del bot de WhatsApp y los clientes que marcaron en el IVR, por turno entre los vendedores.",
+  "icons": { "16": "iconos/icono-16.png", "32": "iconos/icono-32.png", "48": "iconos/icono-48.png", "128": "iconos/icono-128.png" },
+  "action": { "default_title": "Avisos: leads e IVR", "default_icon": { "16": "iconos/icono-16.png", "32": "iconos/icono-32.png" } },
+  "side_panel": { "default_path": "panel.html" },
+  "background": { "service_worker": "fondo.js", "type": "module" },
+  "permissions": ["storage", "notifications", "alarms", "sidePanel", "offscreen"],
+  "host_permissions": ["https://*/*"]
+}

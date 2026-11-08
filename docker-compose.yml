@@ -1,0 +1,30 @@
+# PostgreSQL + Redis para el discador.
+# Los puertos quedan atados a 127.0.0.1: solo el backend (en el mismo servidor) los usa.
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: discador
+      POSTGRES_USER: discador
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-discador_dev}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U discador -d discador"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.4
+    restart: unless-stopped
+    # Redis guarda solo estado en vivo: no necesita persistir a disco
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "127.0.0.1:6379:6379"
+
+volumes:
+  pgdata:

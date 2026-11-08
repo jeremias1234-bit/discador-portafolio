@@ -1,0 +1,40 @@
+{
+  "name": "@discador/backend",
+  "author": "Jeremias Scro",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "migrar": "tsx src/db/migrar.ts",
+    "crear-admin": "tsx src/scripts/crear-admin.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.1.3",
+    "@fastify/multipart": "^10.1.6",
+    "@fastify/websocket": "^11.3.4",
+    "@node-rs/argon2": "^2.2.2",
+    "csv-parse": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
+    "ioredis": "^5.4.2",
+    "pg": "^8.13.1",
+    "pg-copy-streams": "^7.0.0",
+    "ws": "^8.18.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.11.10",
+    "@types/pg-copy-streams": "^1.2.5",
+    "@types/ws": "^8.5.13",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

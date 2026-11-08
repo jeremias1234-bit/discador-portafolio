@@ -1,0 +1,102 @@
+# Discador completo en Docker (producción en la oficina: WSL2 con red "mirrored", o Linux).
+#   cp docker/env.produccion.ejemplo .env   (claves; trae COMPOSE_FILE=compose.produccion.yml)
+#   docker compose up -d --build
+# Guía completa: docs/INSTALACION-WSL.md
+#
+# Todos los servicios usan la red del host: Asterisk necesita SIP (5060/udp), el audio
+# (10000-20000/udp) y el WSS (8089) en la IP del servidor, y el backend le habla a Asterisk y a
+# la base por 127.0.0.1. La base y Redis escuchan solo en 127.0.0.1. Si SIP, el audio o ARI chocan
+# con otro programa de la máquina, se cambian con PUERTO_SIP, RTP_INICIO, RTP_FIN y PUERTO_ARI en .env.
+# Antes de levantarlo: certificados en /etc/discador (scripts/tls/crear-certificados.sh IP).
+name: discador
+
+x-comun: &comun
+  network_mode: host
+  restart: unless-stopped
+  logging:
+    driver: json-file
+    options: { max-size: "20m", max-file: "5" }
+
+services:
+  postgres:
+    <<: *comun
+    image: postgres:17
+    command: ["postgres", "-c", "listen_addresses=127.0.0.1", "-c", "port=${PUERTO_POSTGRES:-5432}"]
+    environment:
+      POSTGRES_DB: discador
+      POSTGRES_USER: discador
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en .env}
+      TZ: ${TZ:-America/Argentina/Buenos_Aires}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -p ${PUERTO_POSTGRES:-5432} -U discador -d discador"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    <<: *comun
+    image: redis:7.4
+    # Redis guarda solo estado en vivo (sesiones): no necesita persistir a disco
+    command: ["redis-server", "--bind", "127.0.0.1", "--port", "${PUERTO_REDIS:-6379}", "--save", "", "--appendonly", "no"]
+
+  asterisk:
+    <<: *comun
+    build: { context: ., dockerfile: docker/asterisk/Dockerfile, network: host }
+    image: discador-asterisk
+    environment:
+      ARI_PASSWORD: ${ARI_PASSWORD:?Falta ARI_PASSWORD en .env}
+      PUERTO_SIP: ${PUERTO_SIP:-5060}
+      RTP_INICIO: ${RTP_INICIO:-10000}
+      RTP_FIN: ${RTP_FIN:-20000}
+      PUERTO_ARI: ${PUERTO_ARI:-8088}
+      TZ: ${TZ:-America/Argentina/Buenos_Aires}
+    volumes:
+      - compartido:/var/lib/discador
+      - audios:/var/lib/asterisk/sounds/campanas
+      - grabaciones:/var/spool/asterisk/recording
+      - /etc/discador:/etc/discador:ro
+
+  backend:
+    <<: *comun
+    build: { context: ., dockerfile: docker/backend/Dockerfile, network: host }
+    image: discador-backend
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_started }
+      asterisk: { condition: service_started }
+    environment:
+      PUERTO_API: 3000
+      DATABASE_URL: postgres://discador:${POSTGRES_PASSWORD}@127.0.0.1:${PUERTO_POSTGRES:-5432}/discador
+      REDIS_URL: redis://127.0.0.1:${PUERTO_REDIS:-6379}
+      ARI_URL: http://127.0.0.1:${PUERTO_ARI:-8088}
+      ARI_USUARIO: discador
+      ARI_PASSWORD: ${ARI_PASSWORD}
+      ARI_APP: discador
+      ARCHIVO_PJSIP: /var/lib/discador/pjsip/pjsip_discador.conf
+      DIR_AUDIOS: /var/lib/asterisk/sounds/campanas
+      DIR_GRABACIONES: /var/spool/asterisk/recording
+      ARCHIVO_CA: /etc/discador/ca/ca.crt
+      SESION_HORAS: ${SESION_HORAS:-12}
+      COOKIE_SEGURA: "true"
+      TZ: ${TZ:-America/Argentina/Buenos_Aires}
+    volumes:
+      - compartido:/var/lib/discador
+      - audios:/var/lib/asterisk/sounds/campanas
+      - grabaciones:/var/spool/asterisk/recording
+      - /etc/discador:/etc/discador:ro
+
+  panel:
+    <<: *comun
+    build: { context: ., dockerfile: docker/panel/Dockerfile, network: host }
+    image: discador-panel
+    depends_on: [backend]
+    volumes:
+      - /etc/discador:/etc/discador:ro
+
+volumes:
+  pgdata:
+  compartido:
+  audios:
+  grabaciones:

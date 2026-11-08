@@ -1,0 +1,16 @@
+# Panel web por HTTPS (Vite, con el certificado de la CA interna en /etc/discador/tls).
+# Para el piloto; en producción el backend servirá el panel compilado.
+[Unit]
+Description=Discador - panel web
+After=network-online.target discador-backend.service
+Wants=network-online.target
+
+[Service]
+User=__USUARIO__
+WorkingDirectory=__DIR__/apps/frontend
+ExecStart=/usr/bin/node __DIR__/node_modules/vite/bin/vite.js --strictPort
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

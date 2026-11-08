@@ -1,0 +1,15 @@
+{
+  "name": "discador",
+  "author": "Jeremias Scro",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @discador/backend",
+    "dev:panel": "npm run dev -w @discador/frontend",
+    "migrar": "npm run migrar -w @discador/backend",
+    "crear-admin": "npm run crear-admin -w @discador/backend --",
+    "typecheck": "npm run typecheck --workspaces --if-present"
+  }
+}

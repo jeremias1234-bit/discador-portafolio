@@ -1,0 +1,18 @@
+# Backend del discador (API, motor, conmutador). Lo instala deploy/instalar-servicios.sh,
+# que reemplaza __USUARIO__ y __DIR__.
+[Unit]
+Description=Discador - backend
+After=network-online.target docker.service asterisk.service
+Wants=network-online.target asterisk.service
+Requires=docker.service
+
+[Service]
+User=__USUARIO__
+WorkingDirectory=__DIR__/apps/backend
+ExecStart=/usr/bin/node __DIR__/node_modules/tsx/dist/cli.mjs src/index.ts
+# Si la base o Asterisk todavía no están listos al arrancar, reintenta
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Detector de leads</title>
+  <style>
+    :root { --fondo: #0e1722; --panel: #142230; --borde: #2b3d4d; --texto: #e6edf3; --suave: #8ea3b5; --acento: #65d6bc; --whatsapp: #25d366; --peligro: #e5534b; --aviso: #f2c94c; color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 380px; background: var(--fondo); color: var(--texto); font: 14px/1.4 system-ui, sans-serif; }
+    header { padding: 10px 14px; background: var(--panel); border-bottom: 1px solid var(--borde); display: flex; justify-content: space-between; align-items: center; }
+    main { padding: 12px 14px; display: flex; flex-direction: column; gap: 12px; }
+    label { display: flex; flex-direction: column; gap: 4px; color: var(--suave); }
+    input[type=text], input[type=password] { background: var(--panel); border: 1px solid var(--borde); color: var(--texto); border-radius: 6px; padding: 8px; font: inherit; }
+    button { background: var(--panel); color: var(--texto); border: 1px solid var(--borde); border-radius: 6px; padding: 7px 10px; font: inherit; cursor: pointer; }
+    button.primario { background: var(--acento); color: #0b1a17; border-color: var(--acento); font-weight: 600; }
+    .fila { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .chip { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--borde); color: var(--suave); }
+    .ok { color: var(--whatsapp); border-color: var(--whatsapp); }
+    .mal { color: var(--peligro); border-color: var(--peligro); }
+    .aviso { color: var(--aviso); border-color: var(--aviso); }
+    .suave { color: var(--suave); font-size: 12px; }
+    .tilde { flex-direction: row; align-items: center; gap: 8px; color: var(--texto); }
+    #registro { max-height: 220px; overflow: auto; font-size: 12px; border: 1px solid var(--borde); border-radius: 6px; padding: 6px; background: var(--panel); }
+    #registro div { padding: 2px 0; border-bottom: 1px solid #1d2d3b; }
+    #registro .error { color: var(--peligro); }
+    #registro .ok { color: var(--texto); border-color: #1d2d3b; }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>Detector de leads <span id="version" class="suave"></span></strong>
+    <span id="estado" class="chip"></span>
+  </header>
+  <main>
+    <div class="suave">Mira los chats del bot en WhatsApp Web (solo lectura) y manda al discador los clientes que responden el pedido de DNI o de domicilio. WhatsApp Web tiene que quedar abierto en esta PC.</div>
+    <label>Servidor del discador <input type="text" id="servidor" placeholder="https://192.168.1.10:5173"></label>
+    <label>Token del Detector <input type="password" id="token" placeholder="svc_…" autocomplete="off"></label>
+    <div class="suave">El token se crea en el panel: Leads → Configuración del Detector → Crear token.</div>
+    <label>Nombre de esta PC <input type="text" id="pc" maxlength="80"></label>
+    <label class="tilde"><input type="checkbox" id="pausado"> Pausar el Detector (no manda leads)</label>
+    <div class="fila">
+      <button class="primario" id="guardar">Guardar</button>
+      <button id="probar">Probar envío</button>
+      <span id="resultado" class="suave"></span>
+    </div>
+    <div class="fila suave" id="detalle"></div>
+    <strong>Últimos eventos</strong>
+    <div id="registro"></div>
+  </main>
+  <script type="module" src="opciones.js"></script>
+</body>
+</html>

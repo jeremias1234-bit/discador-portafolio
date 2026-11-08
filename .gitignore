@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.env
+*.log
+
+# Certificados TLS y grabaciones nunca van al repo
+asterisk/keys/
+grabaciones/
+
+# Instaladores descargados (no van al repo)
+*.deb
+
+# Producción en Docker: respaldos de la base (las claves van en .env)
+*.dump

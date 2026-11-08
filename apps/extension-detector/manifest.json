@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Discador - Detector de leads",
+  "short_name": "Detector leads",
+  "version": "1.1.3",
+  "description": "Mira (solo lectura) los chats del bot en WhatsApp Web y, cuando un cliente elige Claro en el primer menú, manda el lead al discador (y lo completa con el interés, el DNI o el domicilio).",
+  "icons": { "16": "iconos/icono-16.png", "32": "iconos/icono-32.png", "48": "iconos/icono-48.png", "128": "iconos/icono-128.png" },
+  "action": { "default_title": "Detector de leads", "default_popup": "opciones.html" },
+  "options_page": "opciones.html",
+  "background": { "service_worker": "fondo.js", "type": "module" },
+  "permissions": ["storage", "alarms", "scripting"],
+  "host_permissions": ["https://web.whatsapp.com/*", "https://*/*"],
+  "content_scripts": [
+    { "matches": ["https://web.whatsapp.com/*"], "js": ["puente.js"], "run_at": "document_idle" },
+    { "matches": ["https://web.whatsapp.com/*"], "js": ["lector.js"], "run_at": "document_idle", "world": "MAIN" }
+  ]
+}
